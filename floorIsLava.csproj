@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{27701B43-EAA2-EFEC-3700-52CE31DC5E5B}</ProjectGuid>
+    <ProjectGuid>{DF424F19-E1F4-5616-6D2D-AC75BB1DC605}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AssemblyName>Assembly-CSharp</AssemblyName>
     <FileAlignment>512</FileAlignment>
@@ -91,6 +91,8 @@
     <Compile Include="Assets\Scripts\ItemStar.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\LineRendererWithInput.cs" />
+    <Compile Include="Assets\Scripts\Portal.cs" />
+    <Compile Include="Assets\Scripts\PortalsPair.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

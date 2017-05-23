@@ -3,76 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class LineRendererWithInput : MonoBehaviour {
+public class LineRendererWithInput : MonoBehaviour
+{
 
-    public float baseSpeed;
-    LayerMask whatIsGround;
+    public float speedX = 2;
+    public float maxSpeedY = 2;
 
-    private LineRenderer lineRenderer;
-    private EdgeCollider2D edgeCollider;
+    LineRenderer lineRenderer;
+    EdgeCollider2D edgeCollider;
+    public Transform endMark;
+
+    Vector3 firstMousePos;
     Vector3 lastMousePos;
 
-
-    void Awake ()
+    void Awake()
     {
         lineRenderer = GetComponent<LineRenderer>();
         edgeCollider = GetComponent<EdgeCollider2D>();
-	}
-	
-	void Update ()
+        endMark = transform.Find("endMark"); //GetComponentInChildren<SpriteRenderer>();
+
+        if (lineRenderer.positionCount > 0)
+        {
+            endMark.transform.position = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
+        }
+    }
+
+    void Update()
     {
-//#if UNITY_ANDROID || UNITY_IOS || UNITY_WP8
-//#else
         if (Input.GetMouseButtonDown(0))
         {
+            firstMousePos = Input.mousePosition;
             lastMousePos = Input.mousePosition;
         }
-        if (Input.GetMouseButton(0) 
+        if (Input.GetMouseButton(0)
             && (EventSystem.current.currentSelectedGameObject == null)
             && (GameManager.instance.applyingForce == false))
         {
-            float dx = Time.deltaTime * baseSpeed;
-            float dy = Camera.main.ScreenToWorldPoint(Input.mousePosition).y - Camera.main.ScreenToWorldPoint(lastMousePos).y;
+            float dx = Time.deltaTime * speedX;
 
-            //if(Mathf.Abs(dy) > Mathf.Abs(dx))
-            //{
-            //    if (dy >= 0)
-            //        dy = Mathf.Abs(dx);
-            //    else
-            //        dy = -Mathf.Abs(dx);
-            //}
+            //Debug.Log("Screen h = " + Screen.height);
+            float speedY = ((Input.mousePosition.y - firstMousePos.y) / Screen.height) * maxSpeedY;
+            float dy = Time.deltaTime * speedY;
+
+            //float dy = Camera.main.ScreenToWorldPoint(Input.mousePosition).y - Camera.main.ScreenToWorldPoint(lastMousePos).y;
 
             Vector3 lastPosition = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
             Vector3 nextPosition = new Vector3(lastPosition.x + dx, lastPosition.y + dy, lastPosition.z);
 
             AddNewPosition(nextPosition);
+            endMark.transform.position = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
 
             lastMousePos = Input.mousePosition;
         }
-//#endif
-        //if (Input.touchCount == 1)
-        //{
-        //    if (Input.touches[0].phase == TouchPhase.Moved)
-        //    {
-        //        float dx = Time.deltaTime * baseSpeed;
-        //        float dy = Input.touches[0].deltaPosition.y;
-
-        //        //if(Mathf.Abs(dy) > Mathf.Abs(dx))
-        //        //{
-        //        //    if (dy >= 0)
-        //        //        dy = Mathf.Abs(dx);
-        //        //    else
-        //        //        dy = -Mathf.Abs(dx);
-        //        //}
-
-        //        Vector3 lastPosition = lineRenderer.GetPosition(lineRenderer.positionCount - 1);
-        //        Vector3 nextPosition = new Vector3(lastPosition.x + dx, lastPosition.y + dy, lastPosition.z);
-
-        //        AddNewPosition(nextPosition);
-
-        //        lastMousePos = Input.mousePosition;
-        //    }
-        //}
     }
 
     void AddNewPosition(Vector3 point)

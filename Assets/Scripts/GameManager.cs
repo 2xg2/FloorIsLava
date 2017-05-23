@@ -7,21 +7,21 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     public GameObject ballPrefab;
     public GameObject linePrefab;
-    public GameObject followPrefab;
 
     public LevelManager levelMgr;
 
     [HideInInspector] public Transform cameraFollowTarget;
 
-    [HideInInspector] public GameObject ball;
-    [HideInInspector] public GameObject line;
-    [HideInInspector] public GameObject follow;
+    /*[HideInInspector]*/ public GameObject ball;
+    /*[HideInInspector]*/ public LineRendererWithInput line;
 
     [HideInInspector] public float totalDistance = 0f;
     [HideInInspector] public float totalTime = 0f;
     [HideInInspector] public int totalStars = 0;
 
     [HideInInspector] public bool applyingForce = false;
+
+    private bool cameraOnLine = false;
 
     void Awake()
     {
@@ -34,12 +34,11 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ball = Instantiate(ballPrefab);
-        line = Instantiate(linePrefab);
-        follow = Instantiate(followPrefab);
+        line = Instantiate(linePrefab).GetComponent<LineRendererWithInput>();
 
         PositionStuff();
 
-        cameraFollowTarget = ball.transform;//follow.transform;
+        cameraFollowTarget = ball.transform;
 
         totalDistance = 0f;
         totalTime = 0f;
@@ -58,9 +57,6 @@ public class GameManager : MonoBehaviour
         float lineX = ball.transform.position.x - ballWidth / 2 - lineWith / 2;
         float lineY = ball.transform.position.y - ballWidth / 2 - lineWith / 2;
         linePrefab.transform.position = new Vector3(lineX, lineY, ball.transform.position.z);
-
-        LineRenderer lr = linePrefab.GetComponent<LineRenderer>();
-        follow.transform.position = linePrefab.transform.TransformPoint(lr.GetPosition(lr.positionCount - 1));
     }
 
     void FixedUpdate()
@@ -72,9 +68,8 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        Destroy(ball);
-        Destroy(line);
-        Destroy(follow);
+        Destroy(ball.gameObject);
+        Destroy(line.gameObject);
         levelMgr.Restart();
         Start();        
     }
@@ -91,5 +86,25 @@ public class GameManager : MonoBehaviour
     public void OnItemStar()
     {
         totalStars++;
+    }
+
+    public void OnItemPortalOrange()
+    {
+        
+    }
+
+    public void OnCameraToggle()
+    {
+        cameraOnLine = !cameraOnLine;
+        if(cameraOnLine)
+        {
+            cameraFollowTarget = line.endMark;
+        }
+        else
+        {
+            cameraFollowTarget = ball.transform;
+        }
+
+        Debug.Log("on");
     }
 }
