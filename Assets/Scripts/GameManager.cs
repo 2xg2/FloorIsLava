@@ -104,7 +104,5 @@ public class GameManager : MonoBehaviour
         {
             cameraFollowTarget = ball.transform;
         }
-
-        Debug.Log("on");
     }
 }
