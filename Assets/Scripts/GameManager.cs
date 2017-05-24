@@ -13,7 +13,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public Transform cameraFollowTarget;
 
     /*[HideInInspector]*/ public GameObject ball;
-    /*[HideInInspector]*/ public LineRendererWithInput line;
+    /*[HideInInspector]*/ public LineBaseWithInput line;
 
     [HideInInspector] public float totalDistance = 0f;
     [HideInInspector] public float totalTime = 0f;
@@ -22,6 +22,7 @@ public class GameManager : MonoBehaviour
     [HideInInspector] public bool applyingForce = false;
 
     private bool cameraOnLine = false;
+    private bool gameStarted = false;
 
     void Awake()
     {
@@ -34,7 +35,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         ball = Instantiate(ballPrefab);
-        line = Instantiate(linePrefab).GetComponent<LineRendererWithInput>();
+        line = Instantiate(linePrefab).GetComponent<LineBaseWithInput>();
 
         PositionStuff();
 
@@ -45,6 +46,8 @@ public class GameManager : MonoBehaviour
         totalStars = 0;
 
         levelMgr.CreateLevel();
+
+        gameStarted = true;
     }
 
     void PositionStuff()
@@ -61,18 +64,24 @@ public class GameManager : MonoBehaviour
 
     void FixedUpdate()
     {
-        //Debug.Log("ball velo: x = " + ball.GetComponent<Rigidbody2D>().velocity.x + ", y = " + ball.GetComponent<Rigidbody2D>().velocity.y);
-        totalDistance = ball.transform.position.x - levelMgr.startPos.x;
-        totalTime += Time.deltaTime;
-
-        if (ball.transform.position.x > levelMgr.bounds.max.x)
+        if(gameStarted)
         {
-            Restart();
+            //Debug.Log("ball velo: x = " + ball.GetComponent<Rigidbody2D>().velocity.x + ", y = " + ball.GetComponent<Rigidbody2D>().velocity.y);
+            totalDistance = ball.transform.position.x - levelMgr.startPos.x;
+            totalTime += Time.deltaTime;
+
+            if (ball.transform.position.x > levelMgr.bounds.max.x)
+            {
+                Restart();
+            }
         }
+
     }
 
     public void Restart()
     {
+        gameStarted = false;
+
         Destroy(ball.gameObject);
         Destroy(line.gameObject);
         levelMgr.DestroyLevel();
@@ -83,9 +92,12 @@ public class GameManager : MonoBehaviour
 
     public void StopBall()
     {
-        ball.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
-        ball.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
-        ball.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        if (gameStarted)
+        {
+            ball.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Static;
+            ball.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+            ball.GetComponent<Rigidbody2D>().bodyType = RigidbodyType2D.Dynamic;
+        }
     }
 
     public void OnItemStar()
@@ -100,14 +112,17 @@ public class GameManager : MonoBehaviour
 
     public void OnCameraToggle()
     {
-        cameraOnLine = !cameraOnLine;
-        if(cameraOnLine)
-        {
-            cameraFollowTarget = line.endMark;
-        }
-        else
-        {
-            cameraFollowTarget = ball.transform;
+        if (gameStarted)
+        { 
+            cameraOnLine = !cameraOnLine;
+            if (cameraOnLine)
+            {
+                cameraFollowTarget = line.endMark;
+            }
+            else
+            {
+                cameraFollowTarget = ball.transform;
+            }
         }
     }
 }
