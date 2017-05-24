@@ -44,7 +44,7 @@ public class GameManager : MonoBehaviour
         totalTime = 0f;
         totalStars = 0;
 
-        levelMgr.StartLevel();
+        levelMgr.CreateLevel();
     }
 
     void PositionStuff()
@@ -64,13 +64,18 @@ public class GameManager : MonoBehaviour
         //Debug.Log("ball velo: x = " + ball.GetComponent<Rigidbody2D>().velocity.x + ", y = " + ball.GetComponent<Rigidbody2D>().velocity.y);
         totalDistance = ball.transform.position.x - levelMgr.startPos.x;
         totalTime += Time.deltaTime;
+
+        if (ball.transform.position.x > levelMgr.bounds.max.x)
+        {
+            Restart();
+        }
     }
 
     public void Restart()
     {
         Destroy(ball.gameObject);
         Destroy(line.gameObject);
-        levelMgr.Restart();
+        levelMgr.DestroyLevel();
         Start();        
     }
 
