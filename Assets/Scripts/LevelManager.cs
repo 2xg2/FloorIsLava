@@ -4,48 +4,32 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public Bounds bounds;
-    public Vector3 startPos = new Vector3(0f, 0f, 0f);
+    public LevelDataClass levelData;
+
 
     //----------- stars ---------
-    public GameObject starPrefab;
     public Bounds starsBounds;
     public int starsCount;
 
     private Vector3[] starsPos;
-    private List<GameObject> starsObj = new List<GameObject>();
+    private List<GameObject> starsObj;
     private GameObject starsHolder;
 
-    public GameObject finishLinePrefab;
     private GameObject boundsHolder;
 
-    //----------- portals ---------
-    class PortalsPairPosition
+    Transform levelHolder;
+
+    void Awake()
     {
-        public Vector3 orangePosition;
-        public Vector3 bluePosition;
-
-        public PortalsPairPosition(Vector3 orangePos, Vector3 bluePos)
-        {
-            orangePosition = orangePos;
-            bluePosition = bluePos;
-        }
+        levelHolder = new GameObject("LevelHolder").transform;
+        starsObj = new List<GameObject>();
     }
-    [HideInInspector] public GameObject portalsPairPrefab;
-    private int portalsPairsCount = 0;
-    private PortalsPairPosition[] portalsPairsPos;
-    private List<GameObject> portalsPairsObj = new List<GameObject>();
-    private GameObject portalsHolder;
-    //----------- portals end ---------
-
 
     public void CreateLevel()
     {
         GenerateStarPositions();
         CreateAndPosBounds();
         CreateAndPosStars();
-        //CreateAndPosPortals();
-        //CreateAndPosFinishLine();
     }
     public void DestroyLevel()
     {
@@ -66,12 +50,19 @@ public class LevelManager : MonoBehaviour
 
     void CreateAndPosBounds()
     {
-        boundsHolder = Instantiate(new GameObject("BoundsHolder"));
+        boundsHolder = new GameObject("BoundsHolder");
+        boundsHolder.transform.parent = levelHolder;
+        if(Application.isEditor)
+        {
+            boundsHolder.transform.Translate(new Vector3(0f, 0f, -1f));
+        }
+        
 
-        Vector3 pos1 = new Vector3(bounds.min.x, bounds.max.y, 0f);
-        Vector3 pos2 = new Vector3(bounds.max.x, bounds.max.y, 0f);
-        Vector3 pos3 = new Vector3(bounds.max.x, bounds.min.y, 0f);
-        Vector3 pos4 = new Vector3(bounds.min.x, bounds.min.y, 0f);
+
+        Vector3 pos1 = new Vector3(levelData.bounds.min.x, levelData.bounds.max.y, 0f);
+        Vector3 pos2 = new Vector3(levelData.bounds.max.x, levelData.bounds.max.y, 0f);
+        Vector3 pos3 = new Vector3(levelData.bounds.max.x, levelData.bounds.min.y, 0f);
+        Vector3 pos4 = new Vector3(levelData.bounds.min.x, levelData.bounds.min.y, 0f);
 
         GameObject obj1 = new GameObject("line1", typeof(LineRenderer));
         obj1.transform.parent = boundsHolder.transform;
@@ -113,20 +104,17 @@ public class LevelManager : MonoBehaviour
     }
     void CreateAndPosStars()
     {
-        starsHolder = Instantiate(new GameObject("StarsHolder"));
+        starsHolder = new GameObject("StarsHolder");
+        starsHolder.transform.parent = levelHolder;
         for (int i = 0; i < starsCount; i++)
         {
-            GameObject star = Instantiate(starPrefab, starsPos[i], Quaternion.identity, starsHolder.transform);
+            GameObject star = Instantiate(levelData.starPrefab, starsPos[i], Quaternion.identity, starsHolder.transform);
             starsObj.Add(star.gameObject);
         }
     }
 
     void DestroyBounds()
     {
-        //for(Transform t in boundsHolder)
-        //{
-
-        //}
         Destroy(boundsHolder.gameObject);
     }
 
@@ -138,25 +126,5 @@ public class LevelManager : MonoBehaviour
         }
         starsObj.Clear();
         Destroy(starsHolder.gameObject);
-    }
-
-    void CreateAndPosFinishLine()
-    {
-        Quaternion q = Quaternion.AngleAxis(90, Vector3.forward);
-        Instantiate(finishLinePrefab, new Vector3(bounds.max.x, bounds.center.y, 0f), Quaternion.identity);
-        Instantiate(finishLinePrefab, new Vector3(bounds.center.x, bounds.min.y, 0f), q);
-        Instantiate(finishLinePrefab, new Vector3(bounds.center.x, bounds.max.y, 0f), q);
-    }
-
-    void CreateAndPosPortals()
-    {
-        portalsPairsCount = 1;
-        portalsPairsPos = new PortalsPairPosition[1];
-        Vector3 orangePos = new Vector3(8f, -2f, 0f);
-        Vector3 bluePos = new Vector3(10f, 2f, 0f);
-        portalsPairsPos[0] = new PortalsPairPosition(orangePos, bluePos);
-
-        PortalsPair pp = Instantiate(portalsPairPrefab, portalsHolder.transform).GetComponent<PortalsPair>();
-        pp.CreateAndPos(portalsPairsPos[0].orangePosition, portalsPairsPos[0].bluePosition);
     }
 }

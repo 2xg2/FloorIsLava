@@ -12,6 +12,17 @@ public class BallImpulse : MonoBehaviour
     private float arrowWidth = 0f;
     private Vector3 v;
 
+    void Start()
+    {
+        arrow = Instantiate(arrowPrefab);//, gameObject.transform.position, Quaternion.identity);
+        //arrow.transform.parent = gameObject.transform;
+        //arrow.transform.Translate(0f, 0f, -1f);
+    }
+    void OnDestroy()
+    {
+        Destroy(arrow);
+    }
+
     public void ApplyForce(float thrustPercent, Vector3 dir)
     {
         GetComponent<Rigidbody2D>().AddForce(dir * thrustMax * thrustPercent, ForceMode2D.Impulse);
@@ -19,6 +30,14 @@ public class BallImpulse : MonoBehaviour
 
     void Update()
     {
+        Debug.Log("Ball velocity: " + GetComponent<Rigidbody2D>().velocity);
+        Vector2 velo = GetComponent<Rigidbody2D>().velocity;
+        float angleV = Mathf.Atan2(velo.y, velo.x) * Mathf.Rad2Deg;
+        Quaternion qV = Quaternion.AngleAxis(angleV, Vector3.forward);
+        arrow.transform.rotation = qV;
+        arrow.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z + 1);
+        return;
+
         if(Input.GetMouseButtonDown(0))
         {
             Vector3 mousePos = Input.mousePosition;
@@ -27,12 +46,12 @@ public class BallImpulse : MonoBehaviour
             {
                 if(hit.transform.gameObject == gameObject)
                 {
-                    GameManager.instance.applyingForce = true;
+                    GameManager.Instance.applyingForce = true;
                     startMousePos = mousePos;
                 }
             }
         }
-        if(Input.GetMouseButton(0) && GameManager.instance.applyingForce)
+        if(Input.GetMouseButton(0) && GameManager.Instance.applyingForce)
         {
             if(!arrow)
             {
@@ -63,11 +82,11 @@ public class BallImpulse : MonoBehaviour
             arrow.transform.rotation = q;
 
         }
-        if(Input.GetMouseButtonUp(0) && GameManager.instance.applyingForce)
+        if(Input.GetMouseButtonUp(0) && GameManager.Instance.applyingForce)
         {
             if(arrow)
             {
-                GameManager.instance.applyingForce = false;
+                GameManager.Instance.applyingForce = false;
                 startMousePos = Vector3.zero;
 
                 Vector3 dir = Input.mousePosition - Camera.main.WorldToScreenPoint(gameObject.transform.position);

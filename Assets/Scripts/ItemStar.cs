@@ -6,7 +6,7 @@ public class ItemStar : MonoBehaviour
 {
     void OnTriggerEnter2D(Collider2D other)
     {
-        GameManager.instance.OnItemStar();
+        GameManager.Instance.OnItemStar();
         Destroy(gameObject);
     }
 }

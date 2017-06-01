@@ -11,8 +11,8 @@ public class UIManager : MonoBehaviour
 
     void Update()
     {
-        totalDistance.GetComponent<Text>().text = "Distance: " + GameManager.instance.totalDistance.ToString("F2");
-        totalTime.GetComponent<Text>().text = "Time: " + GameManager.instance.totalTime.ToString("F2");
-        totalStars.GetComponent<Text>().text = "Stars: " + GameManager.instance.totalStars.ToString();
+        totalDistance.GetComponent<Text>().text = "Distance: " + GameManager.Instance.totalDistance.ToString("F2");
+        totalTime.GetComponent<Text>().text = "Time: " + GameManager.Instance.totalTime.ToString("F2");
+        totalStars.GetComponent<Text>().text = "Stars: " + GameManager.Instance.totalStars.ToString();
     }
 }

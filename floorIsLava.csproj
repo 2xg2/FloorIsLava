@@ -81,13 +81,14 @@
     <Compile Include="Assets\Scripts\BallCenter.cs" />
     <Compile Include="Assets\Scripts\BallImpulse.cs" />
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
+    <Compile Include="Assets\Scripts\CameraMoveH.cs" />
     <Compile Include="Assets\Scripts\GameManager.cs" />
     <Compile Include="Assets\Scripts\ItemStar.cs" />
+    <Compile Include="Assets\Scripts\LevelDataClass.cs" />
     <Compile Include="Assets\Scripts\LevelManager.cs" />
     <Compile Include="Assets\Scripts\LineBaseWithInput.cs" />
-    <Compile Include="Assets\Scripts\LineRendererWithInput.cs" />
-    <Compile Include="Assets\Scripts\Portal.cs" />
-    <Compile Include="Assets\Scripts\PortalsPair.cs" />
+    <Compile Include="Assets\Scripts\ParallaxScrollingBkg.cs" />
+    <Compile Include="Assets\Scripts\TrailRendererWith2DCollider.cs" />
     <Compile Include="Assets\Scripts\UIManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

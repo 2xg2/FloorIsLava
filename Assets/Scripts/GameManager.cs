@@ -4,16 +4,18 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    static GameManager instance;
+    public static GameManager Instance { get { return instance; } }
+
     public GameObject ballPrefab;
     public GameObject linePrefab;
 
     public LevelManager levelMgr;
 
-    [HideInInspector] public Transform cameraFollowTarget;
+    /*[HideInInspector] */public Transform cameraFollowTarget;
 
-    /*[HideInInspector]*/ public GameObject ball;
-    /*[HideInInspector]*/ public LineBaseWithInput line;
+    GameObject ball;
+    LineBaseWithInput line;
 
     [HideInInspector] public float totalDistance = 0f;
     [HideInInspector] public float totalTime = 0f;
@@ -39,7 +41,7 @@ public class GameManager : MonoBehaviour
 
         PositionStuff();
 
-        cameraFollowTarget = ball.transform;
+        cameraFollowTarget = /*line.endMark.transform;//*/ball.transform;
 
         totalDistance = 0f;
         totalTime = 0f;
@@ -52,25 +54,24 @@ public class GameManager : MonoBehaviour
 
     void PositionStuff()
     {
-        ball.transform.position = levelMgr.startPos;
+        ball.transform.position = levelMgr.levelData.startPos;
         
         Renderer ballRenderer = ball.GetComponent<Renderer>();
         float ballWidth = ballRenderer.bounds.size.x;
-        float lineWith = linePrefab.GetComponent<LineRenderer>().startWidth;
+        float lineWith = line.GetComponent<LineRenderer>().startWidth;
         float lineX = ball.transform.position.x - ballWidth / 2 - lineWith / 2;
         float lineY = ball.transform.position.y - ballWidth / 2 - lineWith / 2;
-        linePrefab.transform.position = new Vector3(lineX, lineY, ball.transform.position.z);
+        line.transform.position = new Vector3(lineX, lineY, ball.transform.position.z);
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if(gameStarted)
         {
-            //Debug.Log("ball velo: x = " + ball.GetComponent<Rigidbody2D>().velocity.x + ", y = " + ball.GetComponent<Rigidbody2D>().velocity.y);
-            totalDistance = ball.transform.position.x - levelMgr.startPos.x;
+            totalDistance = ball.transform.position.x - levelMgr.levelData.startPos.x;
             totalTime += Time.deltaTime;
 
-            if (ball.transform.position.x > levelMgr.bounds.max.x)
+            if (ball.transform.position.x > levelMgr.levelData.bounds.max.x)
             {
                 Restart();
             }
@@ -100,14 +101,14 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void ImpulseBall()
+    {
+        ball.GetComponent<BallImpulse>().ApplyForce(1f, ball.GetComponent<Rigidbody2D>().velocity.normalized);
+    }
+
     public void OnItemStar()
     {
         totalStars++;
-    }
-
-    public void OnItemPortalOrange()
-    {
-        
     }
 
     public void OnCameraToggle()
@@ -117,7 +118,7 @@ public class GameManager : MonoBehaviour
             cameraOnLine = !cameraOnLine;
             if (cameraOnLine)
             {
-                cameraFollowTarget = line.endMark;
+                cameraFollowTarget = line.endMark.transform;
             }
             else
             {

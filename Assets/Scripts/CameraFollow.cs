@@ -6,11 +6,11 @@ public class CameraFollow : MonoBehaviour
 {
     public Vector3 offset = new Vector3(0f, 0f, -10f);
 
-    void Update()
+    void LateUpdate()
     {
-        if (GameManager.instance != null && GameManager.instance.cameraFollowTarget != null)
+        if (GameManager.Instance != null && GameManager.Instance.cameraFollowTarget != null)
         {
-            gameObject.transform.position = GameManager.instance.cameraFollowTarget.position + offset;
+            gameObject.transform.position = GameManager.Instance.cameraFollowTarget.position + offset;
         }
     }
 }
