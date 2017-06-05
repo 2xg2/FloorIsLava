@@ -1,12 +1,13 @@
 fileFormatVersion: 2
 guid: 1aceb25050326c84cbc83bf5bcbc78ab
-timeCreated: 1495657367
+timeCreated: 1496520166
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
     21300000: snake-graphics_0
     21300002: snake-graphics_1
     21300004: snake-graphics_2
+    21300006: snake-graphics_3
   serializedVersion: 4
   mipmaps:
     mipMapMode: 0
@@ -96,8 +97,8 @@ TextureImporter:
         y: 194
         width: 63
         height: 60
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 4
+      pivot: {x: 0, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -110,7 +111,7 @@ TextureImporter:
         width: 54
         height: 59
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
@@ -123,7 +124,20 @@ TextureImporter:
         width: 52
         height: 52
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      tessellationDetail: 0
+    - serializedVersion: 2
+      name: snake-graphics_3
+      rect:
+        serializedVersion: 2
+        x: 261
+        y: 70
+        width: 59
+        height: 52
+      alignment: 5
+      pivot: {x: 1, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
