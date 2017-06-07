@@ -1,2 +1,21 @@
 TO DO:
-1.
+
+1. NEW POWERUPS
+  Powerup-urile apar random in partea din dreapta a ecranului. Ele se spawneaza undeva in afara ecranului random. Momentan o sa avem 2.
+  Practic se face un bounding box de 2 x inaltimea ecranului + latimea ecranului. Apoi lasam un spatiu in pixeli pana la linia de sus si jos a 
+  box-ului si alegem un punct random in care se spawneaza un powerup random.
+  - Tot timpul powerup-urile se vor spawna in afara ecranului, dupa ce parcurgi cel putin doua ecrane distanta fata de starting point.
+  - Powerup-urile plutesc in aer, au o miscare lina in sus/jos (10 pixels in total) 
+  - Powerup-urile se genereaza in real time, inaintea liniei pe masura ce tu te joci
+  - Cand atingi un powerup cu roata, acesta dispare si genereaza powerup-ul respectiv.
+  
+ 1.1 FLAME BALL POWERUP
+  - Atunci cand iei Flame powerup, se genereaza (apare brusc) in partea din dreapta, in afara ecranului, o bila de foc Ball of flame.png
+  - Bila de foc porneste spre centrul rotii (centrul la momentul in care a luat powerup-ul) cu o viteza accelerata (porneste de la o viteza si termina cu alta)
+  - Isi mentine viteza si directia (o linie dreapta) pana cand iese din ecran
+  - Daca bila de foc te atinge, te omoara, game over.
+  
+  1.2 SPEED POWERUP
+  - Atunci cand iei acest powerup, primesti un mic impuls in directia de mers, care iti da un speed boost
+  
+  
