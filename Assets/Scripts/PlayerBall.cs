@@ -6,10 +6,17 @@ public class PlayerBall : MonoBehaviour
 {
     public float thrustMax;
     public GameObject arrowPrefab;
+    public float minVelocity = 1f;
 
     private Vector3 startMousePos = Vector3.zero;
     private GameObject dirArrow;
     private Vector2 lastValidVelo;
+    private Rigidbody2D rigidbody;
+
+    void Awake()
+    {
+        rigidbody = GetComponent<Rigidbody2D>();
+    }
 
     void Start()
     {
@@ -23,17 +30,35 @@ public class PlayerBall : MonoBehaviour
         Destroy(dirArrow);
     }
 
+    void LateUpdate()
+    {
+        Vector3 velo = rigidbody.velocity;
+        float fVelo = velo.magnitude;
+        Debug.Log("Ball velocity: " + velo + ", velo.magnitude = " + velo.magnitude);
+        if (fVelo < minVelocity)
+        {
+            //float boostSpeed = minVelocity - fVelo;
+            //Vector3 boostVelo = boostSpeed * velo.normalized;
+            //rigidbody.AddForce(boostVelo);
+
+            if (rigidbody.bodyType != RigidbodyType2D.Static)
+            {
+                rigidbody.velocity = velo.normalized * minVelocity;
+            }
+        }
+    }
+
     public void ApplyForce(float thrustPercent, Vector3 dir)
     {
-        GetComponent<Rigidbody2D>().AddForce(dir * thrustMax * thrustPercent, ForceMode2D.Impulse);
+        rigidbody.AddForce(dir * thrustMax * thrustPercent, ForceMode2D.Impulse);
     }
 
     void Update()
     {
         if (!(GameManager.Instance && GameManager.Instance.gameStarted))
             return;
-        Vector2 velo = GetComponent<Rigidbody2D>().velocity;
-        Debug.Log("Ball velocity: " + velo + ", velo.magnitude = " + velo.magnitude);
+        Vector2 velo = rigidbody.velocity;
+        
         
         if(Mathf.Abs(velo.magnitude) > 0.01)
         {

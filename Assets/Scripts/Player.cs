@@ -116,9 +116,9 @@ public class Player : MonoBehaviour
 
         if (playerBall)
         {
-            if(GameManager.Instance && GameManager.Instance.levelMgr && GameManager.Instance.levelMgr.levelData && GameManager.Instance.levelMgr.levelData.bounds.max.x < 0)
+            if(GameManager.Instance && GameManager.Instance.levelMgr && GameManager.Instance.levelMgr.levelData && GameManager.Instance.levelMgr.levelData.levelBounds.max.x < 0)
             {
-                if (playerBall.transform.position.x > GameManager.Instance.levelMgr.levelData.bounds.max.x)
+                if (playerBall.transform.position.x > GameManager.Instance.levelMgr.levelData.levelBounds.max.x)
                 {
                     gameWon = true;
                 }
